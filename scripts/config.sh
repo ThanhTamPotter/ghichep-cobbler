@@ -5,6 +5,7 @@ IP_START=192.168.122.100
 IP_END=192.168.122.200
 GATEWAY=192.168.122.1
 DNS=8.8.8.8
+passwd=cobbler
 
 echocolor(){
         printf "\n"

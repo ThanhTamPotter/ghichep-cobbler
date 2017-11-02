@@ -27,6 +27,8 @@ firewall-cmd --reload
 
 cobbler=/etc/cobbler/settings
 cp $cobbler $cobbler.orig
+pass=`openssl passwd -1 '$passwd'`
+sed -i "s|default_password_crypted.*|'"default_password_crypted: \"$pass\""'/g" $cobbler
 sed -i 's/manage_dhcp: 0/manage_dhcp: 1/g' $cobbler
 sed -i 's/manage_dns: 0/manage_dns: 1/g' $cobbler
 sed -i 's/pxe_just_once: 0/pxe_just_once: 1/g' $cobbler
@@ -54,4 +56,4 @@ cobbler get-loaders
 cobbler check
 cobbler sync
 
-echocolor "Hoan thanh cai dat Cobbler, truy cap vao dia chi: https://$IP_ADD/cobbler_web dien user cobbler, password cobbler de su dung."
+echocolor "Hoan thanh cai dat Cobbler, truy cap vao dia chi: https://$IP_ADD/cobbler_web dien user cobbler, password $passwd de su dung."
