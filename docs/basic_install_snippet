@@ -1,0 +1,29 @@
+# set language to use during installation
+lang en_US
+langsupport en_US
+
+# set keyboard layout for the system
+keyboard us
+
+# reboot the system after installation
+reboot
+# config repo source.list
+url --url http://192.168.122.110/cblr/links/US1604-x86_64/
+
+# Sets up the authentication options for the system.
+auth --useshadow --enablemd5
+
+bootloader --location=mbr
+
+zerombr yes
+
+clearpart --all --initlabel
+
+# setup timezone
+timezone Asia/Ho_Chi_Minh
+
+# Set the system's root password
+rootpw rootpassword123
+
+# Creates a new user on the system
+user ttp --fullname=ttp --password=ttppassword123
