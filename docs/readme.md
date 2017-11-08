@@ -11,4 +11,6 @@
 - [Một số ghi chép về các thao tác cơ bản quản lý và sử dụng Cobbler](./3.Cobbler-Su_dung_coban.md)
 
 	- [Tím hiểu và sử dụng snippet](./3.Cobbler-Su_dung_coban.md#1.6)
+	
+- [Tích hợp script cài đặt Openstack vào Cobbler](./4.Cobbler_Tich_hop_script_OPS.md)
 
