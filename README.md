@@ -7,4 +7,6 @@ Các ghi chép về công cụ cobbler
 
 `images`: thư mục chứa các hình ảnh minh họa trong ghi chép.
 
+`tools`: thư mục chứa các file về kickstart mẫu.
+
 `ref`: thư mục chứa các tài liệu tham khảo (nếu có).
