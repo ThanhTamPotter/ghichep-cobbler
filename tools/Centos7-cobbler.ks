@@ -1,4 +1,3 @@
-
 #platform=x86, AMD64, or Intel EM64T
 #version=DEVEL
 # Firewall configuration
@@ -9,7 +8,7 @@ install
 url --url="http://192.168.122.110/cblr/links/CentOS7-x86_64/"
 
 # Set the system's root password
-rootpw rootpassword123
+rootpw --iscrypted $default_password_crypted 
 
 # Creates a new user on the system
 user ttp --fullname=ttp --password=ttppassword123

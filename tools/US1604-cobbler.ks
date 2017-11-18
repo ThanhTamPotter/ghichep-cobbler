@@ -26,7 +26,7 @@ clearpart --all
 timezone Asia/Ho_Chi_Minh
 
 # Set the system's root password
-rootpw rootpassword123
+rootpw --iscrypted $default_password_crypted 
 
 # Creates a new user on the system
 user ttp --fullname=ttp --password=ttppassword123
@@ -42,8 +42,6 @@ preseed partman-lvm/confirm_nooverwrite boolean true
 preseed partman-auto-lvm/no_boot boolean true
 
 # Configures network information
-
-network --bootproto=dhcp --device=ens3 
 
 # Do not configure the X Window System
 skipx
