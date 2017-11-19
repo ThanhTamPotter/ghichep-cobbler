@@ -52,6 +52,8 @@ systemctl restart rsyncd.service
 systemctl restart cobblerd
 systemctl restart xinetd
 systemctl enable xinetd
+systemctl restart dhcpd
+systemctl restart tftp
 cobbler get-loaders
 cobbler check
 cobbler sync
