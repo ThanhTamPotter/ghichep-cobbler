@@ -8,9 +8,17 @@
 	
 	- [Cài đặt sử dụng scripts](./2.Cobbler-cai_dat.md#3)
 
-- [Một số ghi chép về các thao tác cơ bản quản lý và sử dụng Cobbler](./3.Cobbler-Su_dung_coban.md)
+- [Một số ghi chép về các thao tác cơ bản quản lý và sử dụng Cobbler](./5.Cobbler-Su_dung_coban.md)
 
-	- [Tím hiểu và sử dụng snippet](./3.Cobbler-Su_dung_coban.md#1.6)
+	- [Tìm hiểu và sử dụng snippet](./5.Cobbler-Su_dung_coban.md#1.6)
 	
-- [Tích hợp script cài đặt Openstack vào Cobbler](./4.Cobbler_Tich_hop_script_OPS.md)
+- [Build hệ điều hành Centos 7 vào Cobbler](./3.Cobbler_Build_Centos.md)
+
+- [Build hệ điều hành Ubuntu vào Cobbler](./4.Cobbler_Build_Ubuntu.md)
+
+- [Tích hợp script cài đặt Openstack vào Cobbler](./6.Cobbler_Tich_hop_script_OPS.md)
+
+---
+
+- [Tổng hợp một số ghi chép trong quá trình sử dụng Cobbler](./7.Mot_so_ghi_chep_Cobbler)
 

@@ -1,0 +1,45 @@
+Ngày 18/11
+- 15h50: bật DHCP dải private1 lên không ảnh hưởng gì hết.
+- 16h05: sửa thêm tùy chọn net.ifnames=0 biosdevname=0 vào trong menu boot thì tên card mạng không bị đổi. nhưng trong phần cấu hình /etc/network/interfaces đã để tên card là eth1.
+- 16h20: sửa thêm tùy chọn trên vào phần kernel options trong profile nhưng kết quả thu được là như trên.
+-16h50: sửa vào phần post kernel options trong profile nhưng kết quả thu được là như trên.
+
+
+
+Ngày 19/11:
+- 10h15: boot OS từ một ổ cứng đã có dữ liệu, dữ liệu cũ bị xóa. 
+- 10h25: boot Centos 7 cấu hình trong file kickstart các card mạng đều cho dhcp thì khi boot lên, card mạng đã được bật và đã DHCP IP thành công. Tên card mạng vẫn là eth.
+
+- 15h40: boot Ubuntu 16.04 lên, vẫn cần phải fix trong file grub để hiển thị được giao diện trên noVNC của Webvirtmgr. Để cấu hình card mạng tự động cần phải thêm tùy chọn netcfg/choose_interfac=ens4 vào kernel options. => Không hay :(( 
+
+- 16h20: boot ubuntu: thêm phần sau vào file preseed: 
+
+d-i preseed/late_command string \
+sed -i '/PermitRootLogin / s/ .*/ yes/' /target/etc/ssh/sshd_config; \
+sed -i 's/quiet splash//g' /target/etc/default/grub; \
+in-target update-grub
+ thì chạy được như bình thường. Bao giờ mới tích hợp được OPS đây ==' 
+
+- 16h45: thêm options vào profile: net.ifnames=0 biosdevname=0
+- 17h00: thêm options vào profile cả kernel options và kernel options (post install) 
+- 17h30: boot ngon lành như centos hết 10'
+
+wget http://192.168.122.110/cblr/svc/op/script/profile/US16test-x86_64/?script=preseed_ttp_default
+
+
+Ngày 20/11: 
+- 18h30: cài Cobbler lên Centos trong VMware. Thực hiện boot client Centos7, thêm tùy chọn biosdevname=0 net.ifnames=0 vào cả 2 tùy chọn của kernel options thì centos không đổi tên. Phải thêm tùy chọn: bootloader --location=mbr --append="biosdevname=0 net.ifnames=0" trong file kickstart thì mới được. Card mạng vẫn để nguyên là ethX.
+
+Ngày 21/11:
+- 17h00: boot Centos 7 2 ổ cứng, phân vùng cấu hình như sau: (KVM)
+	clearpart --all --initlabel
+	part swap --asprimary --fstype="swap" --size=1024
+	part /boot --fstype xfs --size=500
+	part pv.01 --size=1 --grow
+	volgroup root_vg01 pv.01
+	logvol / --fstype xfs --name=lv_01 --vgname=root_vg01 --size=1 --grow
+
+	Kết quả: phân vùng trên cả 2 ổ cứng vda và vdb. vda: 500M phân vùng /boot vào vda1, 1G swap và vda2. pv.01 phân vùng vào vdb. logical volume: root_vg01-lv_01 cho phân vùng / vào vdb1.
+- 17h40: boot Centos 2 ổ cứng, chỉ định cài: --ondrive=vda là ok. (KVM)
+- 18h05: VMware Centos 2 ổ cứng, không chỉ định chọn ổ trong file kickstart thì phân vùng trên cả 2 ổ.
+- 18h15: VMware 2 ổ cứng, chỉ định cài: --ondisk=sda là ok. :D
