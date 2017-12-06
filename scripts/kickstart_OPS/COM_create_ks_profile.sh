@@ -33,7 +33,7 @@ reboot
 text
 
 #System bootloader configuration
-bootloader --location=mbr
+bootloader --location=mbr --append="biosdevname=0 net.ifnames=0"
 
 #Partition clearing information
 clearpart --all
