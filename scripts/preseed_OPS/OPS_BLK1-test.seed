@@ -45,7 +45,7 @@ d-i live-installer/net-image string http://$http_server/cobbler/links/$distro_na
 # d-i mirror/udeb/suite string precise
 
 # Components to use for loading installer components (optional).
-#d-i mirror/udeb/components multiselect main, restricted
+# d-i mirror/udeb/components multiselect main, restricted
 
 # Disk Partitioning
 # Use LVM, and wipe out anything that already exists
@@ -70,12 +70,21 @@ d-i partman-auto/choose_recipe select atomic
 # else, you can do that without providing a full recipe.
 # d-i partman/default_filesystem string ext4
 
-# root account and password
+### Account setup
 d-i passwd/root-login boolean true
-d-i passwd/root-password-crypted password $default_password_crypted
+d-i passwd/make-user boolean true
 
-# skip creation of a normal user account.
-d-i passwd/make-user boolean false
+# Root password, either in clear text
+d-i passwd/root-password password welcome123
+d-i passwd/root-password-again password welcome123
+
+# To create a normal user account.
+d-i passwd/user-fullname string Ubuntu User
+d-i passwd/username string ubuntu
+d-i passwd/user-password password welcome123
+d-i passwd/user-password-again password welcome123
+d-i user-setup/allow-password-weak boolean true
+d-i user-setup/encrypt-home boolean false
 
 # You can choose to install restricted and universe software, or to install
 # software from the backports repository.
@@ -129,6 +138,7 @@ d-i finish-install/reboot_in_progress note
 #else
 #set $what = "profile"
 #end if
+#set $blk_no=1
 
 # This first command is run as early as possible, just after preseeding is read.
 # d-i preseed/early_command string [command]
@@ -136,12 +146,12 @@ d-i preseed/early_command string wget -O- \
    http://$http_server/cblr/svc/op/script/$what/$name/?script=preseed_early_default | \
    /bin/sh -s
 d-i preseed/late_command string \
-sed -i '/PermitRootLogin / s/ .*/ yes/' /target/etc/ssh/sshd_config; \
 mkdir -p /target/root/scripts; \
 cd /target/root/scripts; \
 wget http://$http_server/cblr/svc/op/script/$what/$name/?script=BLK_script -O late_command.sh; \
 chmod 755 *; \
-/target/bin/sh late_command.sh
+/target/bin/sh late_command.sh; \
+echo "BLK_NUM=$blk_no" > /target/root/OPS-setup/BLK/blk_num.sh
 
 
 
@@ -156,4 +166,3 @@ chmod 755 *; \
 # directly, or use the apt-install and in-target commands to easily install
 # packages and run commands in the target system.
 # d-i preseed/late_command string [command]
-

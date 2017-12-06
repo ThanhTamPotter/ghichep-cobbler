@@ -1,9 +1,10 @@
 sed -i '/PermitRootLogin / s/ .*/ yes/' /target/etc/ssh/sshd_config
 sed -i 's/$http_server/vn.archive.ubuntu.com/g' /target/etc/apt/sources.list
 sed -i 's|cblr/links/$distro_name|ubuntu|g' /target/etc/apt/sources.list
-cat << EOF > /target/etc/apt/apt.conf.d/00aptproxy
-Acquire::http::Proxy "http://192.168.122.1:3142";
-EOF
+# uncomment 3 following lines if you want to use apt-cache-ng
+#cat << EOF > /target/etc/apt/apt.conf.d/00aptproxy
+#Acquire::http::Proxy "http://192.168.122.1:3142";
+#EOF
 cp /target/etc/rc.local /target/etc/rc.local.bak
 chmod 755 /target/etc/rc.local
 cat << HERE > /target/etc/rc.local
@@ -13,5 +14,7 @@ cd /root
 wget --no-parent --recursive -nH --reject=index.html* http://192.168.122.110/OPS-setup/
 cd /root/OPS-setup/COM
 source com-all.sh
+rm /etc/rc.local
+mv /etc/rc.local.bak /etc/rc.local
 exit 0
 HERE

@@ -1,3 +1,7 @@
+#!/bin/bash
+source config.sh
+
+cat << HERE > /var/lib/cobbler/kickstarts/OPS_BLK$blk_num-test.seed
 # Mostly based on the Ubuntu installation guide
 # https://help.ubuntu.com/16.04/installation-guide/
 
@@ -12,10 +16,10 @@ d-i keyboard-configuration/variantcode string
 
 # netcfg will choose an interface that has link if possible. This makes it
 # skip displaying a list if there is more than one interface.
-#set $myhostname = $getVar('hostname',$getVar('name','cobbler')).replace("_","-")
+#set \$myhostname = \$getVar('hostname',\$getVar('name','cobbler')).replace("_","-")
 # config network not effective when boot from network
 ## d-i netcfg/choose_interface select eth0 
-## d-i netcfg/get_hostname string $myhostname
+## d-i netcfg/get_hostname string \$myhostname
 
 # If non-free firmware is needed for the network or other hardware, you can
 # configure the installer to always try to load it, without prompting. Or
@@ -30,14 +34,14 @@ d-i clock-setup/ntp-server  string ntp.ubuntu.com
 
 # Setup the installation source
 d-i mirror/country string manual
-d-i mirror/http/hostname string $http_server
-d-i mirror/http/directory string $install_source_directory
+d-i mirror/http/hostname string \$http_server
+d-i mirror/http/directory string \$install_source_directory
 d-i mirror/http/proxy string
 
-#set $os_v = $getVar('os_version','')
-#if $os_v and $os_v.lower()[0] > 'p'
+#set \$os_v = \$getVar('os_version','')
+#if \$os_v and \$os_v.lower()[0] > 'p'
 # Required at least for 12.10+
-d-i live-installer/net-image string http://$http_server/cobbler/links/$distro_name/install/filesystem.squashfs
+d-i live-installer/net-image string http://\$http_server/cobbler/links/\$distro_name/install/filesystem.squashfs
 #end if
 
 # Suite to install.
@@ -45,7 +49,7 @@ d-i live-installer/net-image string http://$http_server/cobbler/links/$distro_na
 # d-i mirror/udeb/suite string precise
 
 # Components to use for loading installer components (optional).
-#d-i mirror/udeb/components multiselect main, restricted
+# d-i mirror/udeb/components multiselect main, restricted
 
 # Disk Partitioning
 # Use LVM, and wipe out anything that already exists
@@ -69,12 +73,21 @@ d-i partman-auto/choose_recipe select atomic
 # else, you can do that without providing a full recipe.
 # d-i partman/default_filesystem string ext4
 
-# root account and password
+### Account setup
 d-i passwd/root-login boolean true
-d-i passwd/root-password-crypted password $default_password_crypted
+d-i passwd/make-user boolean true
 
-# skip creation of a normal user account.
-d-i passwd/make-user boolean false
+# Root password, either in clear text
+d-i passwd/root-password password $ROOT_PASS
+d-i passwd/root-password-again password $ROOT_PASS
+
+# To create a normal user account.
+d-i passwd/user-fullname string Ubuntu User
+d-i passwd/username string $USER_NAME
+d-i passwd/user-password password $USER_PASS
+d-i passwd/user-password-again password $USER_PASS
+d-i user-setup/allow-password-weak boolean true
+d-i user-setup/encrypt-home boolean false
 
 # You can choose to install restricted and universe software, or to install
 # software from the backports repository.
@@ -91,7 +104,7 @@ d-i passwd/make-user boolean false
 # d-i apt-setup/security_host string security.ubuntu.com
 # d-i apt-setup/security_path string /ubuntu
 
-$SNIPPET('preseed_apt_repo_config')
+\$SNIPPET('preseed_apt_repo_config')
 
 # Enable deb-src lines
 # d-i apt-setup/local0/source boolean true
@@ -114,7 +127,7 @@ d-i pkgsel/include string ssh wget
 # Use the following option to add additional boot parameters for the
 # installed system (if supported by the bootloader installer).
 # Note: options passed to the installer will be added automatically.
-d-i debian-installer/add-kernel-opts string $kernel_options
+d-i debian-installer/add-kernel-opts string \$kernel_options
 d-i grub-installer/bootdev  string default
 d-i debian-installer/quiet boolean false
 d-i debian-installer/splash boolean false
@@ -123,36 +136,39 @@ d-i debian-installer/splash boolean false
 d-i finish-install/reboot_in_progress note
 
 ## Figure out if we're kickstarting a system or a profile
-#if $getVar('system_name','') != ''
-#set $what = "system"
+#if \$getVar('system_name','') != ''
+#set \$what = "system"
 #else
-#set $what = "profile"
+#set \$what = "profile"
 #end if
+#set \$blk_no=$blk_num
 
 # This first command is run as early as possible, just after preseeding is read.
 # d-i preseed/early_command string [command]
-d-i preseed/early_command string wget -O- \
-   http://$http_server/cblr/svc/op/script/$what/$name/?script=preseed_early_default | \
+d-i preseed/early_command string wget -O- \\
+   http://\$http_server/cblr/svc/op/script/\$what/\$name/?script=preseed_early_default | \\
    /bin/sh -s
-d-i preseed/late_command string \
-sed -i '/PermitRootLogin / s/ .*/ yes/' /target/etc/ssh/sshd_config; \
-mkdir -p /target/root/scripts; \
-cd /target/root/scripts; \
-wget http://$http_server/cblr/svc/op/script/$what/$name/?script=ttp_ps -O late_command.sh; \
-chmod 755 *; \
-/target/bin/sh late_command.sh
+d-i preseed/late_command string \\
+mkdir -p /target/root/scripts; \\
+cd /target/root/scripts; \\
+wget http://\$http_server/cblr/svc/op/script/\$what/\$name/?script=BLK_script -O late_command.sh; \\
+chmod 755 *; \\
+/target/bin/sh late_command.sh; \\
+echo "BLK_NUM=\$blk_no" > /target/root/OPS-setup/BLK/blk_num.sh
 
 
 
 # This command is run immediately before the partitioner starts. It may be
 # useful to apply dynamic partitioner preseeding that depends on the state
 # of the disks (which may not be visible when preseed/early_command runs).
-# d-i partman/early_command \
-#       string debconf-set partman-auto/disk "\$(list-devices disk | head -n1)"
+# d-i partman/early_command \\
+#       string debconf-set partman-auto/disk "\\\$(list-devices disk | head -n1)"
 
 # This command is run just before the install finishes, but when there is
 # still a usable /target directory. You can chroot to /target and use it
 # directly, or use the apt-install and in-target commands to easily install
 # packages and run commands in the target system.
 # d-i preseed/late_command string [command]
+HERE
 
+cobbler profile add --name=OPS-Block$blk_num --distro=US160403-x86_64 --kickstart=/var/lib/cobbler/kickstarts/OPS_BLK$blk_num-test.seed
