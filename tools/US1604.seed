@@ -136,7 +136,7 @@ d-i preseed/early_command string wget -O- \
    /bin/sh -s
 d-i preseed/late_command string \
 sed -i '/PermitRootLogin / s/ .*/ yes/' /target/etc/ssh/sshd_config; \
-sed -i 's/$http_server /vn.archive.ubuntu.com/g' /target/etc/apt/sources.list; \
+sed -i 's/$http_server/vn.archive.ubuntu.com/g' /target/etc/apt/sources.list; \
 sed -i 's|cblr/links/$distro_name|ubuntu|g' /target/etc/apt/sources.list; \
 touch /target/root/hello_TTP
 
