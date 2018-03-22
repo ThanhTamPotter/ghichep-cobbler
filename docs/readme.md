@@ -8,6 +8,8 @@
 	
 	- [Cài đặt sử dụng scripts](./2.Cobbler-cai_dat.md#3)
 
+- [Hướng dẫn cài đặt Cobbler trên Centos 6](./8.Cai_dat_Cobbler_Centos6.md)
+
 - [Build hệ điều hành Centos 7 vào Cobbler](./3.Cobbler_Build_Centos.md)
 
 - [Build hệ điều hành Ubuntu vào Cobbler](./4.Cobbler_Build_Ubuntu.md)
