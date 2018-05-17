@@ -11,7 +11,7 @@ install
 # reboot the system after installation
 reboot
 # config repo source.list
-url --url http://192.168.122.110/cblr/links/US1604-x86_64/
+url --url http://$http_server/cblr/links/$distro_name/
 
 # Sets up the authentication options for the system.
 auth --useshadow --enablemd5
@@ -59,7 +59,7 @@ sed -i 's/GRUB_HIDDEN_TIMEOUT=0/#GRUB_HIDDEN_TIMEOUT=0/g' /etc/default/grub
 sed -i 's/quiet splash//g' /etc/default/grub
 update-grub
 ### Dieu chinh repo
-sed -i 's/192.168.122.110/vn.archive.ubuntu.com/g' /etc/apt/sources.list
-sed -i 's/cblr\/links\/US1604-x86_64/ubuntu/g' /etc/apt/sources.list
+sed -i 's/$http_server/vn.archive.ubuntu.com/g' /etc/apt/sources.list
+sed -i 's/cblr\/links\/$distro_name/ubuntu/g' /etc/apt/sources.list
 apt-get update -y && apt-get upgrade -y
 %end

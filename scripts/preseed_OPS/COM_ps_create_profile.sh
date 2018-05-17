@@ -151,7 +151,7 @@ d-i preseed/early_command string wget -O- \\
 d-i preseed/late_command string \\
 mkdir -p /target/root/scripts; \\
 cd /target/root/scripts; \\
-wget http://\$http_server/cblr/svc/op/script/\$what/\$name/?script=COM_script -O late_command.sh; \\
+wget http://\$http_server/cblr/svc/op/script/\$what/\$name/?script=COM_script.sh -O late_command.sh; \\
 chmod 755 *; \\
 /target/bin/sh late_command.sh; \\
 echo "COM_NUM=\$com_no" > /target/root/OPS-setup/COM/com_num.sh

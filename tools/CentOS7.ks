@@ -5,7 +5,7 @@ firewall --disabled
 # Install OS instead of upgrade
 install
 # Use HTTP installation media
-url --url="http://192.168.122.110/cblr/links/CentOS7-x86_64/"
+url --url="http://$http_server/cblr/links/$distro_name/"
 
 # Root password
 rootpw --iscrypted $1$mTEGIfvw$YodZf1ilLvn4E4FM7nfNn0

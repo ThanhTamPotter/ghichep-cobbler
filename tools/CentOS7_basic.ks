@@ -5,13 +5,13 @@ firewall --disabled
 # Install OS instead of upgrade
 install
 # Use HTTP installation media
-url --url="http:// $http_server/cblr/links/ /$distro_name/"
+url --url="http://$http_server/cblr/links/$distro_name/"
 
 # Set the system's root password (use $default_password that is configured in /etc/cobbler/settings)
 rootpw --iscrypted $default_password_crypted
 
 # Creates a new user on the system
-user ttp --fullname=ttp --password=ttppassword123
+user ttp --name=ttp --password=ttppassword123
 
 # Network information
 network --bootproto=dhcp --device=eth0 --onboot=on

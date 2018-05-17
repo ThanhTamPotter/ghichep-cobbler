@@ -5,13 +5,13 @@ firewall --disabled
 # Install OS instead of upgrade
 install
 # Use HTTP installation media
-url --url="http://192.168.122.110/cblr/links/CentOS7-x86_64/"
+url --url="http://$http_server/cblr/links/$distro_name/"
 
 # Set the system's root password
 rootpw --iscrypted $default_password_crypted 
 
 # Creates a new user on the system
-user ttp --fullname=ttp --password=ttppassword123
+user ttp --name=ttp --password=ttppassword123
 
 # Network information
 network --bootproto=dhcp --device=eth0 --onboot=on
