@@ -150,7 +150,7 @@ d-i preseed/early_command string wget -O- \\
 d-i preseed/late_command string \\
 mkdir -p /target/root/scripts; \\
 cd /target/root/scripts; \\
-wget http://\$http_server/cblr/svc/op/script/\$what/\$name/?script=CTL_script -O late_command.sh; \\
+wget http://\$http_server/cblr/svc/op/script/\$what/\$name/?script=CTL_script.sh -O late_command.sh; \\
 chmod 755 *; \\
 /target/bin/sh late_command.sh
 
@@ -169,4 +169,4 @@ chmod 755 *; \\
 # d-i preseed/late_command string [command]
 HERE
 
-cobbler profile add --name=OPS-Controller --distro=US160403-x86_64 --kickstart=/var/lib/cobbler/kickstarts/OPS_CTL-test.seed
+cobbler profile add --name=OPS-Controller --distro=US160403-x86_64 --kickstart=/var/lib/cobbler/kickstarts/OPS_CTL_test.seed
