@@ -11,8 +11,9 @@ cat << HERE > /target/etc/rc.local
 #!/bin/bash
 apt update -y && apt upgrade -y
 cd /root
-wget --no-parent --recursive -nH --reject=index.html* http://192.168.122.110/OPS-setup/
+wget --no-parent --recursive -nH --reject=index.html* http://$http_server/OPS-setup/
 cd /root/OPS-setup/COM
+echo "COM_NUM=1" > /root/OPS-setup/COM/com_num.sh
 source com-all.sh
 rm /etc/rc.local
 mv /etc/rc.local.bak /etc/rc.local

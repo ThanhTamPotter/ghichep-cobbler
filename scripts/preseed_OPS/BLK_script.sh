@@ -12,6 +12,7 @@ cat << HERE > /target/etc/rc.local
 apt update -y && apt upgrade -y
 cd /root
 wget --no-parent --recursive -nH --reject=index.html* http://$http_server/OPS-setup/
+echo "BLK_NUM=1" > /root/OPS-setup/BLK/blk_num.sh
 cd /root/OPS-setup/BLK
 source blk-all.sh
 rm /etc/rc.local

@@ -153,8 +153,8 @@ mkdir -p /target/root/scripts; \\
 cd /target/root/scripts; \\
 wget http://\$http_server/cblr/svc/op/script/\$what/\$name/?script=BLK_script.sh -O late_command.sh; \\
 chmod 755 *; \\
-/target/bin/sh late_command.sh; \\
-echo "BLK_NUM=\$blk_no" > /target/root/OPS-setup/BLK/blk_num.sh
+/target/bin/sh late_command.sh
+
 
 
 
